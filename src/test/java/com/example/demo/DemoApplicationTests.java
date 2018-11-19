@@ -17,10 +17,12 @@ public class DemoApplicationTests {
     @Test
     public void contextLoads() {
         while (true) {
-            String msg = new Date().toString();
-            sender.send("  测试数据体" + msg);
+            Message message = new Message();
+            message.setTitle("消息标题");
+            message.setContent("测试数据体" + new Date().toString());
+            sender.send(message.toString());
             try {
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

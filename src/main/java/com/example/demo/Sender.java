@@ -12,9 +12,12 @@ import java.util.UUID;
 
 @Component
 public class Sender implements RabbitTemplate.ConfirmCallback, ReturnCallback {
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    public Sender(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @PostConstruct
     public void init() {
@@ -40,7 +43,7 @@ public class Sender implements RabbitTemplate.ConfirmCallback, ReturnCallback {
     public void send(String msg) {
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
         System.out.println("\n\n开始发送消息 : " + msg.toLowerCase());
-        String response = rabbitTemplate.convertSendAndReceive("topicExchange", "key.1", msg, correlationId).toString();
+        String response = rabbitTemplate.convertSendAndReceive(RabbitConfig.TOPIC_EXCHANGE_NAME, "key.1", msg, correlationId).toString();
         System.out.println("结束发送消息 : " + msg.toLowerCase());
         System.out.println("消费者响应 : " + response + " 消息处理完成");
     }

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
+    public static final String TOPIC_EXCHANGE_NAME = "topicExchange";
 
     //声明队列
     @Bean
@@ -24,18 +25,23 @@ public class RabbitConfig {
     //声明交互器
     @Bean
     TopicExchange topicExchange() {
-        return new TopicExchange("topicExchange");
+        return new TopicExchange(TOPIC_EXCHANGE_NAME);
     }
 
     //绑定
     @Bean
     public Binding binding1() {
-        return BindingBuilder.bind(queue1()).to(topicExchange()).with("key.1");
+        return BindingBuilder
+                .bind(queue1())
+                .to(topicExchange())
+                .with("key.1");
     }
 
     @Bean
     public Binding binding2() {
-        return BindingBuilder.bind(queue2()).to(topicExchange()).with("key.#");
+        return BindingBuilder
+                .bind(queue2())
+                .to(topicExchange())
+                .with("key.#");
     }
-
 }
